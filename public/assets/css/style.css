@@ -1,0 +1,21 @@
+/* リセット */
+* {
+  margin: 0;
+  padding: 0;
+}
+.inner {
+  width: 95%;
+}
+
+.m-0-auto {
+  margin: 0 auto;
+}
+
+.chart__container{
+  overflow-x: scroll;
+}
+.chart__box{
+  width: 1200px !important;
+}
+
+
