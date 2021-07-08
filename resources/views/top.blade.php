@@ -25,6 +25,7 @@
           @endfor
         </select>
         月
+        
         <select name="dayStart" id="dayStart" class="conditions" v-on:change="getConditions">
           @for ($day = 1; $day < 32; $day++)
             <option value="{{ $day }}">{{ $day }}</option>
