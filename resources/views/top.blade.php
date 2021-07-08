@@ -11,7 +11,7 @@
 <body>
   <div id="app"  class="inner m-0-auto">
     <div>
-      <h2>絞り込み</h2>
+      <p>絞り込み</p>
       <div>
         <select name="yearStart" id="yearStart" class="conditions" v-on:change="getConditions">
           <option value="2020">2020</option>
@@ -25,7 +25,7 @@
           @endfor
         </select>
         月
-        
+
         <select name="dayStart" id="dayStart" class="conditions" v-on:change="getConditions">
           @for ($day = 1; $day < 32; $day++)
             <option value="{{ $day }}">{{ $day }}</option>
