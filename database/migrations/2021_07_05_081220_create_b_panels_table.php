@@ -17,7 +17,7 @@ class CreateBPanelsTable extends Migration
             $table->bigIncrements('id');
             $table->string('voltage');
             $table->string('current');
-            $table->string('power');
+            $table->integer('power');
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAPanelsTable extends Migration
+class CreateDailiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateAPanelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('a_panels', function (Blueprint $table) {
+        Schema::create('dailies', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('voltage');
-            $table->string('current');
-            $table->integer('power');
+            $table->integer('panel_1_max_power');
+            $table->integer('panel_2_max_power');
+            $table->date('date');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateAPanelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('a_panels');
+        Schema::dropIfExists('dailies');
     }
 }

@@ -9,58 +9,46 @@
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 <body>
-  <div id="app"  class="inner m-0-auto">
-    <div>
-      <p>絞り込み</p>
-      <div>
-        <select name="yearStart" id="yearStart" class="conditions" v-on:change="getConditions">
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
-        </select>
-        年
-        <select name="monthStart" id="monthStart" class="conditions" v-on:change="getConditions">
-          @for ($month = 1; $month < 13; $month++)
-            <option value="{{ $month }}">{{ $month }}</option>
-          @endfor
-        </select>
-        月
+  <div id="app" class="app">
 
-        <select name="dayStart" id="dayStart" class="conditions" v-on:change="getConditions">
-          @for ($day = 1; $day < 32; $day++)
-            <option value="{{ $day }}">{{ $day }}</option>
-          @endfor
-        </select>
-        日
-        〜
-        <select name="yearEnd" id="yearEnd" class="conditions" v-on:change="getConditions">
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
-        </select>
-        年
-        <select name="monthEnd" id="monthEnd" class="conditions" v-on:change="getConditions">
-          @for ($month = 1; $month < 13; $month++)
-            <option value="{{ $month }}">{{ $month }}</option>
-          @endfor
-        </select>
-        月
-        <select name="dayEnd" id="dayEnd" class="conditions" v-on:change="getConditions">
-          @for ($day = 1; $day < 32; $day++)
-            <option value="{{ $day }}">{{ $day }}</option>
-          @endfor
-        </select>
-        日
-      </div>
-    </div>
-    <div id="ElectricityType">
-      <input type="radio" class="conditions" v-on:change="getConditions" name="type" value="power" checked>電力
-      <input type="radio" class="conditions" v-on:change="getConditions" name="type" value="voltage">電圧
-      <input type="radio" class="conditions" v-on:change="getConditions" name="type" value="current">電流
-    </div>
-    <div class="chart__container">
-      <div class="chart__box">
-        <canvas id="chart"></canvas>
+    <div class="inner m-0-auto">
+      <div>
+        <div class="d-flex justify-content-center align-items-center w-100">
+          <div 
+            class="w-50 pt-1 pb-1 text-center border-tab pointer"
+            v-on:click="getConditions('1')"
+            v-bind:class="{' tab-active': isActive === '1', 'tab-disable': isActive === '2'}"
+          >
+          全期間
+          </div>
+          <div
+            class="w-50 pt-1 pb-1 text-center border-tab pointer"
+            v-on:click="getConditions('2')"
+            v-bind:class="{' tab-active': isActive === '2', 'tab-disable': isActive === '1'}"
+          >
+          日付
+          </div>
+        </div>
+
+        <div class="chart__container">
+          <div class="chart__box">
+            <canvas id="chart"></canvas>
+          </div>
+        </div>
+  
+        <div v-if="isActive === '2'">
+          <div class="d-flex justify-content-space-around pt-2">
+
+            <div class="w-50 text-center">
+              <input type="date" name="date_start" class="conditions conditions__date" id="dateOnly" v-on:change="getConditions(isActive)" v-model="filterDate">
+            </div>
+            <div id="ElectricityType" class="text-white w-50 text-center">
+              <input type="radio" class="conditions ml-2 mr-1" v-on:change="getConditions(isActive)" name="type" value="power" checked>Power
+              <input type="radio" class="conditions ml-2 mr-1" v-on:change="getConditions(isActive)" name="type" value="voltage">Volatge
+              <input type="radio" class="conditions ml-2 mr-1" v-on:change="getConditions(isActive)" name="type" value="current">Current
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -75,44 +63,76 @@
     new Vue({
       el: '#app',
       data: {
-        date: [
-          "'19年1月", "'19年2月", "'19年3月", "'19年4月",
-          "'19年1月", "'19年2月", "'19年3月", "'19年4月",
-          "'19年1月", "'19年2月", "'19年3月", "'19年4月",
-          "'19年1月", "'19年2月", "'19年3月", "'19年4月",
-          "'19年1月", "'19年2月", "'19年3月", "'19年4月",
-        ],
+        xLabel: null,
         panel_1: null, //光触媒あり
         panel_2: null, //光触媒なし
+        isActive: '1',
+        filterDate: new Date().toISOString().slice(0,10)
       },
 
       mounted: async function() {
         await this.getPowerGenerationData('ini');//　初期チェックは電力
       },
 
+  
       methods: {
+
+        changeTab: async function (num) {
+          this.isActive = num;
+          if(typeof myChart !== 'undefined' && myChart) {
+            myChart.destroy();//new chartでグラフがいっぱい描写されてしまうのでリセット
+          }
+          this.canvasChart();
+        },
+        
+
+
         canvasChart: function() {
           var chart = document.getElementById('chart');
-          var myChart = new Chart(chart, {
-          type: 'line',
+          window.myChart = new Chart(chart, {
+            type: 'line',
             data: {
-                labels: this.date,
-                datasets: [
-                  {
-                    label: '光触媒あり',
-                    data: this.panel_1,
-                    fill: false,
-                    borderColor: '#FDC167',
-                  },
-                  {
-                    label: '光触媒なし',
-                    data: this.panel_2,
-                    fill: false,
-                    borderColor: '#105170',
-                  },
-                ]
+              labels: this.xLabel,
+              datasets: [
+                {
+                  label: '光触媒あり',
+                  data: this.panel_1,
+                  fill: false,
+                  borderColor: '#FDC167',
+                },
+                {
+                  label: '光触媒なし',
+                  data: this.panel_2,
+                  fill: false,
+                  borderColor: '#105170',
+                },
+              ]
+            },
+            options: {
+              animation: {
+                duration: 0,
+              },
+              hover: {
+                animationDuration: 0, // アイテムのマウスオーバー時のアニメーションの長さ
+              },
+              // events: ['click'],
+              scales: {
+                xAxes: [{
+                  gridLines: {
+                    display: true,
+                    color: 'rgba(255, 255, 255, 0.075)',
+                  }
+                }],
+                yAxes: [{
+                  gridLines: {
+                    display: true,
+                    color: 'rgba(255, 255, 255, 0.075)',
+                  }
+                }]
+              }
             }
           });
+
         },
 
         // DBからデータをjson形式で取得
@@ -120,81 +140,97 @@
           // プロットのリセット
           this.panel_1 = [];
           this.panel_2 = [];
+          this.xLabel = [];
           var count_1 = 0;
           var count_2 = 0;
-          if(param == 'ini') {
+          var daily_count = 0;
+          const hours = [
+            '0時','1時','2時','3時','4時','5時',
+            '6時','7時','8時','9時','10時','11時',
+            '12時','13時','14時','15時','16時','17時',
+            '18時','19時','20時','21時','22時','23時',
+          ]
+
+          if(this.isActive == "1") {
             var api = '/api/get_power_generation?ini=1&' ;
-            await axios
-              .get(api)
-              .then( res => {
-
-                // 光触媒あり
-                for(var data_1 in res.data.panel_1) {
-                  this.panel_1.push( res.data.panel_1[count_1].power );
-                  count_1 = count_1 + 1;
-                }
-
-                // 光触媒なし
-                for(var data_2 in res.data.panel_2) {
-                  this.panel_2.push( res.data.panel_2[count_2].power );
-                  count_2 = count_2 + 1;
-                }
-              })
-              .catch( err => { console.log(err); })
-            
           } else {
             var api = '/api/get_power_generation?ini=0&' + param ;
-            await axios
-              .get(api)
-              .then( res => {
-                // 光触媒あり
-                for(var data_1 in res.data.panel_1) {
-                  if(ElectricityType == 'power'){
-                    this.panel_1.push( res.data.panel_1[count_1].power );
-                  } else if (ElectricityType == 'voltage') {
-                    this.panel_1.push( res.data.panel_1[count_1].voltage );
-                  } else if (ElectricityType == 'current') {
-                    this.panel_1.push( res.data.panel_1[count_1].current );
-                  }
-                  count_1 = count_1 + 1;
-                }
-  
-                // 光触媒なし
-                for(var data_2 in res.data.panel_2) {
-                  if(ElectricityType == 'power'){
-                    this.panel_2.push( res.data.panel_2[count_2].power );
-                  } else if (ElectricityType == 'voltage') {
-                    this.panel_2.push( res.data.panel_2[count_2].voltage );
-                  } else if (ElectricityType == 'current') {
-                    this.panel_2.push( res.data.panel_2[count_2].current );
-                  }
-                  count_2 = count_2 + 1;
-                }
-              })
-              .catch( err => { console.log(err); })
           }
-          this.canvasChart();
+            
+          await axios
+            .get(api)
+            .then( res => {
+              // 光触媒あり
+              for(var data_1 in res.data.panel_1) {
+                if(ElectricityType == 'power'){
+                  this.panel_1.push( res.data.panel_1[count_1].power );
+                } else if (ElectricityType == 'voltage') {
+                  this.panel_1.push( res.data.panel_1[count_1].voltage );
+                } else if (ElectricityType == 'current') {
+                  this.panel_1.push( res.data.panel_1[count_1].current );
+                }
+                count_1 = count_1 + 1;
+              }
+
+              // 光触媒なし
+              for(var data_2 in res.data.panel_2) {
+                if(ElectricityType == 'power'){
+                  this.panel_2.push( res.data.panel_2[count_2].power );
+                } else if (ElectricityType == 'voltage') {
+                  this.panel_2.push( res.data.panel_2[count_2].voltage );
+                } else if (ElectricityType == 'current') {
+                  this.panel_2.push( res.data.panel_2[count_2].current );
+                }
+                count_2 = count_2 + 1;
+              }
+
+              // 期間なら
+              for (var day in res.data.daily) {
+                this.panel_1.push( res.data.daily[daily_count].panel_1_max_power );
+                this.panel_2.push( res.data.daily[daily_count].panel_2_max_power );
+                this.xLabel.push( res.data.daily[daily_count].date );
+                daily_count = daily_count + 1;
+              }
+
+              if(this.isActive == '2') {
+                this.xLabel = hours;
+              }
+            })
+            .catch( err => { console.log(err); })
+
+            if(typeof myChart !== 'undefined' && myChart) {
+              myChart.destroy();//new chartでグラフがいっぱい描写されてしまうのでリセット
+            }
+            this.canvasChart();
+
         },
 
         // 絞込み条件が変化したら
-        getConditions: function() {
-          var yearStart  = document.getElementById('yearStart').value;
-          var monthStart = document.getElementById('monthStart').value;
-          var dayStart   = document.getElementById('dayStart').value;
-          var yearEnd    = document.getElementById('yearEnd').value;
-          var monthEnd   = document.getElementById('monthEnd').value;
-          var dayEnd     = document.getElementById('dayEnd').value;
-          var type       = document.getElementsByName('type'); // ラジオボタン取得
+        getConditions: async function(num) {
+          await this.changeTab(num)
+          var type = document.getElementsByName('type'); // ラジオボタン取得
+          
           for ( var selectedType = "", i = type.length; i--; ) { 
             if ( type[i].checked ) {
               var ElectricityType = type[i].value; //選択値
               break ;
             }
           }
-          var param = 'year_start=' + yearStart + '&month_start=' + monthStart + '&day_start=' + dayStart + '&year_end=' + yearEnd + '&month_end=' + monthEnd + '&day_end=' + dayEnd + '&type=' + ElectricityType;
 
+          if(this.isActive === '1') {
+            var param = '&max_power=1' + '&type=' + ElectricityType;
+            
+          } else if(this.isActive === '2') {
+            var dateOnly  = document.getElementById('dateOnly').value;
+            var param = 'date_only=' + dateOnly + '&type=' + ElectricityType;
+          }
+
+          if(typeof myChart !== 'undefined' && myChart) {
+              myChart.destroy();//new chartでグラフがいっぱい描写されてしまうのでリセット
+          }
           this.getPowerGenerationData(param, ElectricityType);
           this.canvasChart();
+
         }
       }
     });

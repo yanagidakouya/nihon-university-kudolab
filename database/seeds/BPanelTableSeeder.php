@@ -15,7 +15,7 @@ class BPanelTableSeeder extends Seeder
         //
 
             
-        for($month=1; $month<4; $month++) {
+        for($month=4; $month<8; $month++) {
             for($day=1; $day<32; $day++) {
                 for($hour=0; $hour<24; $hour++) {
                     for($m=0; $m<2; $m++) {

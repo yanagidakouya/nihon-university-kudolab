@@ -5,10 +5,49 @@
 }
 .inner {
   width: 95%;
+  max-width: 1200px;
+}
+
+
+body {
+  background-color: #000;
 }
 
 .m-0-auto {
   margin: 0 auto;
+}
+.w-100 {
+  width: 100%;
+}
+.w-50 {
+  width: 50%;
+}
+/* 余白系 */
+/* margin */
+.mt-5 {
+  margin-top: 5%;
+}
+.mr-1 {
+  margin-right: 1%;
+}
+.mr-2 {
+  margin-right: 2%;
+}
+.ml-2 {
+  margin-left: 2%;
+}
+/* padding */
+.pt-1 {
+  padding-top: 1%;
+}
+.pb-1 {
+  padding-bottom: 1%;
+}
+.pt-2 {
+  padding-top: 2%;
+}
+.pb-2 {
+  padding-bottom: 2%;
 }
 
 .chart__container{
@@ -16,6 +55,64 @@
 }
 .chart__box{
   width: 1200px !important;
+}
+
+
+/* 位置系 */
+.d-flex {
+  display: flex;
+}
+.justify-content-center {
+  justify-content: center;
+} 
+.justify-content-space-around {
+  justify-content: space-around;
+}
+.align-items-center {
+  align-items: center;
+}
+.text-center {
+  text-align: center;
+}
+
+/* border */
+.border-tab {
+  border: 1px #6791D1 solid;
+}
+
+
+/* cursor */
+.pointer {
+  cursor: pointer;
+}
+
+/* カラー系 */
+.tab-active {
+  background-color: #105170;
+  color: #fff;
+}
+.tab-disable {
+  background-color:#32577F;
+  opacity: 0.75;
+  color: #fff;
+}
+.text-white{
+  color: #fff;
+}
+
+
+/* カスタム */
+#ElectricityType {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.conditions__date {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  box-shadow: none !important;
+  border-radius: 25px;
+  border-width: 0 !important;
+  padding: 4px 10px;
 }
 
 
