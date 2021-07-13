@@ -8,6 +8,10 @@
   max-width: 1200px;
 }
 
+a {
+  text-decoration: none;
+}
+
 
 body {
   background-color: #000;
@@ -115,4 +119,21 @@ body {
   padding: 4px 10px;
 }
 
+.export__csv__btn__box {
+  text-align: center;
+  margin-top: 2.5%;
+}
+
+.export__csv__btn {
+  color: #000;
+  padding: 1% 2%;
+  border: 1px #fff solid;
+  background-color: #fff;
+  border-radius: 25px;
+  width: 250px;
+  margin: 0 auto;
+}
+.export__csv__btn:hover {
+  opacity: 0.8;
+}
 

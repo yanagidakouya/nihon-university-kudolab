@@ -35,6 +35,14 @@
             <canvas id="chart"></canvas>
           </div>
         </div>
+
+        <div id="export_csv" class="export_csv">
+          <div class="export__csv__btn__box">
+            <a href="/csv/panel_1" class="export__csv__btn" target="_blank">光触媒ありcsv</a>
+            <a href="/csv/panel_2" class="export__csv__btn" target="_blank">光触媒なしcsv</a>
+            <a href="/csv/by_day_power" class="export__csv__btn" target="_blank">日別最大電力csv</a>
+          </div>
+        </div>
   
         <div v-if="isActive === '2'">
           <div class="d-flex justify-content-space-around pt-2">
@@ -71,7 +79,7 @@
       },
 
       mounted: async function() {
-        await this.getPowerGenerationData('ini');//　初期チェックは電力
+        await this.getPowerGenerationData();
       },
 
   
