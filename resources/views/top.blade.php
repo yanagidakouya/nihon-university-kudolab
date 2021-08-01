@@ -44,6 +44,8 @@
           </div>
         </div>
   
+
+
         <div v-if="isActive === '2'">
           <div class="d-flex justify-content-space-around pt-2">
 

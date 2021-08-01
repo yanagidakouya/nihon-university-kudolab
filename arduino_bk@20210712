@@ -1,0 +1,116 @@
+#include<SD.h>
+#include<Wire.h>
+int DS1307_ADDRESS=0x68;
+int sec,minute,hour;
+int adr0 = 0;
+int year, month, day;
+int sensV, sensI, i;
+
+void getTime() {
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(adr0);
+  Wire.endTransmission();
+  Wire.requestFrom(DS1307_ADDRESS, 3);
+  byte r_sec = Wire.read();
+  sec = (r_sec/16)*10+(r_sec%16);
+  byte r_minute = Wire.read();
+  minute = (r_minute/16)*10+(r_minute%16);
+  byte r_hour = Wire.read();
+  hour = (r_hour/16)*10+(r_hour%16);
+}
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin(); 
+  if(!SD.begin(10)){
+    return;
+  }
+  pinMode(9,OUTPUT);
+  pinMode(6,OUTPUT);
+
+
+}
+
+void loop() {
+  getTime();
+  Serial.print("a");
+  if(sec==0 && minute==0){
+    Serial.print("パネル１");
+    Serial.println("");
+    for(i=0; i<52; i++) {
+      getTime();
+      analogWrite(9, 5*i);
+      delay(1*1000);
+      sensV=analogRead(0);
+      sensI=analogRead(1);
+      File dataFile=SD.open("datalog.txt",FILE_WRITE);
+      
+
+      if(dataFile) {
+
+        // デバッグしつつラズパイに入力できるように。
+        Serial.print("sensI=");
+        Serial.print(sensI);
+        Serial.print(",");
+        Serial.print("sensV=");
+        Serial.print(sensV);
+        Serial.println("");
+        // デバッグしつつラズパイに入力できるように。
+
+        dataFile.print(hour);
+        dataFile.print(":");
+        dataFile.print(minute);
+        dataFile.print(":");
+        dataFile.print(sec);
+        dataFile.print(", ");
+        dataFile.print(",sensI=,");
+        dataFile.print(sensI); 
+        dataFile.print(",sensV=,");
+        dataFile.println(sensV);
+        dataFile.close();
+
+
+
+      }
+    }
+    analogWrite(9, 0);
+    Serial.print("パネル２");
+    Serial.println("");
+    for(i=0; i<52; i++) {
+      getTime();
+      analogWrite(6, 5*i);
+      delay(1*1000);
+      sensV = analogRead(2);
+      sensI = analogRead(3);
+      File dataFile = SD.open("datalog2.txt", FILE_WRITE);
+      if(dataFile) {
+
+        // デバッグしつつラズパイに入力できるように。
+        Serial.print("sensI=");
+        Serial.print(sensI);
+        Serial.print(",");
+        Serial.print("sensV=");
+        Serial.print(sensV);
+        Serial.println("");
+        // デバッグしつつラズパイに入力できるように。
+        
+        dataFile.print(hour);
+        dataFile.print(":");
+        dataFile.print(minute);
+        dataFile.print(":");
+        dataFile.print(sec);
+        dataFile.print(", ");
+        dataFile.print(",sensl=,");
+        dataFile.print(sensI);
+        dataFile.print(",sensV=,");
+        dataFile.println(sensV);
+        dataFile.close();
+      }
+    }
+  } else {
+    analogWrite(9,0);
+    analogWrite(6,0);
+    return;
+  }
+}
+    
