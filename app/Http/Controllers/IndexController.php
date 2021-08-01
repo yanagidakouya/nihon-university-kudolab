@@ -43,6 +43,7 @@ class IndexController extends Controller
     public function insertData(Request $request)
     {
       $send_data = $request->input('send_data');
+      
       // $raspberry_pi = json_decode($request, true);
       if($send_data) {
         if($send_data != 'None') {
