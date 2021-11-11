@@ -43,26 +43,44 @@ class IndexController extends Controller
     public function insertData(Request $request)
     {
       $send_data = $request->input('send_data');
+      
       // $raspberry_pi = json_decode($request, true);
       if($send_data) {
         if($send_data != 'None') {
           $ary = explode(",", $request->input('send_data'));
-          $current = ltrim($ary[0],'sensI=');
-          $voltage = ltrim($ary[1],'sensV=');
-          $power = intval($current) * intval($voltage);
-          // $current = str_replace('sensI=', '', $ary[1]);
-          // $voltage = str_replace('sensV=', '', $ary[0]);
-          
+          $sensI_1 = ltrim($ary[0],'sensI_1=');
+          $sensV_1 = ltrim($ary[1],'sensV_1=');
+          $sensI_2 = ltrim($ary[2],'sensI_2=');
+          $sensV_2 = ltrim($ary[3],'sensV_2=');
+
+          list($current_1, $voltage_1, $current_2, $voltage_2) = $this->measured_value_calculation($sensI_1, $sensV_1, $sensI_2, $sensV_2);
+          $power_1   = $current_1 * $voltage_1;
+          $power_2   = $current_2 * $voltage_2;
+          // TODO sensI_1とsensI_2の値は÷10が必要？？（オームの法則で10オームの抵抗分を割る）
           $a_panel = APanel::create([
-            'current' => $current,
-            'voltage' => $voltage,
-            'power' => $power,
+            'current' => $current_1,
+            'voltage' => $voltage_1,
+            'power' => $power_1,
+          ]);
+          $b_panel = BPanel::create([
+            'current' => $current_2,
+            'voltage' => $voltage_2,
+            'power' => $power_2,
           ]);
         } else {
           return;
         }
       }
       return response()->json($request);
+    }
+
+    public function measured_value_calculation ($sensI_1, $sensV_1, $sensI_2, $sensV_2) {
+      $current_1 = (intval($sensI_1) * 5 ) / 10230;
+      $voltage_1 = (intval($sensV_1) * 5 * 1333) / (1023 * 333);
+      $current_2 = (intval($sensI_2) * 5 ) / 10230;
+      $voltage_2 = (intval($sensV_2) * 5 * 1333) / (1023 * 333);
+      return [$current_1, $voltage_1, $current_2, $voltage_2];
+
     }
 }
 
