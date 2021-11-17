@@ -48,11 +48,10 @@ class IndexController extends Controller
       if($send_data) {
         if($send_data != 'None') {
           $ary = explode(",", $request->input('send_data'));
-          $sensI_1 = ltrim($ary[0],'sensI_1=');
-          $sensV_1 = ltrim($ary[1],'sensV_1=');
-          $sensI_2 = ltrim($ary[2],'sensI_2=');
-          $sensV_2 = ltrim($ary[3],'sensV_2=');
-
+          $sensI_1 = $ary[0];
+          $sensV_1 = $ary[1];
+          $sensI_2 = $ary[2];
+          $sensV_2 = $ary[3];
           list($current_1, $voltage_1, $current_2, $voltage_2) = $this->measured_value_calculation($sensI_1, $sensV_1, $sensI_2, $sensV_2);
           $power_1   = $current_1 * $voltage_1;
           $power_2   = $current_2 * $voltage_2;
