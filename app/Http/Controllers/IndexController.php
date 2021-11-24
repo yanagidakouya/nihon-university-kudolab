@@ -27,8 +27,8 @@ class IndexController extends Controller
       } elseif($request->ini == '0') { // 日付の各時間帯の最大測定値
         $date = $request->date_only;
         if($date) {
-          $a_panel = APanel::whereDate('created_at', $date)->where('created_at', 'LIKE', "%:00:%")->get();
-          $b_panel = BPanel::whereDate('created_at', $date)->where('created_at', 'LIKE', "%:00:%")->get();
+          $a_panel = APanel::whereDate('created_at', $date)->oldest()->get();
+          $b_panel = BPanel::whereDate('created_at', $date)->oldest()->get();
   
           return response()->json(array(
             'panel_1' => $a_panel,

@@ -82,12 +82,6 @@ new Vue({
       var count_1 = 0;
       var count_2 = 0;
       var daily_count = 0;
-      const hours = [
-        '0時','1時','2時','3時','4時','5時',
-        '6時','7時','8時','9時','10時','11時',
-        '12時','13時','14時','15時','16時','17時',
-        '18時','19時','20時','21時','22時','23時',
-      ];
 
       if(this.isActive == "1") {
         var api = '/api/get_power_generation?ini=1&' ;
@@ -121,6 +115,7 @@ new Vue({
             } else if (ElectricityType == 'current') {
               this.panel_2.push( res.panel_2[count_2].current );
             }
+            this.xLabel.push( this.dateFormat(res.panel_2[count_2].created_at) )
             count_2 = count_2 + 1;
           }
 
@@ -131,18 +126,14 @@ new Vue({
             this.xLabel.push( res.daily[daily_count].date );
             daily_count = daily_count + 1;
           }
-
-          if(this.isActive == '2') {
-            this.xLabel = hours;
-          }
         })
         .catch( err => { console.log(err); })
 
         if(typeof myChart !== 'undefined' && myChart) {
           myChart.destroy();//new chartでグラフがいっぱい描写されてしまうのでリセット
         }
+        console.log(this.xLabel)
         this.canvasChart();
-
     },
 
     // 絞込み条件が変化したら
@@ -171,6 +162,12 @@ new Vue({
       this.getPowerGenerationData(param, ElectricityType);
       this.canvasChart();
 
+    },
+
+    dateFormat: function (date) {
+      date = date.split(' ');
+      date = date[1].substring(0, 5);
+      return date;
     }
   }
 });
