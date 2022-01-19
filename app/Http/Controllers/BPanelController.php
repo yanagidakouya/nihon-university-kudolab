@@ -16,7 +16,7 @@ class BPanelController extends Controller
         $csv = new Csv();
         $data = BPanel::all()->toArray();
         $csv_header = ['id', 'voltage', 'current', 'power', 'created_at', 'updated_at'];
-        $file_name = '光触媒なし_' .Carbon::today()->format('Y_m_d') . '.csv';
+        $file_name = '光触媒薄塗り_' .Carbon::today()->format('Y_m_d') . '.csv';
         return $csv->download($data, $csv_header, $file_name);
     }
 }

@@ -2,8 +2,8 @@ new Vue({
   el: '#app',
   data: {
     xLabel: null,
-    panel_1: null, //光触媒あり
-    panel_2: null, //光触媒なし
+    panel_1: null, //光触媒厚塗り
+    panel_2: null, //光触媒薄塗り
     isActive: '1',
     filterDate: new Date().toISOString().slice(0,10)
   },
@@ -33,13 +33,13 @@ new Vue({
           labels: this.xLabel,
           datasets: [
             {
-              label: '光触媒あり',
+              label: '光触媒厚塗り',
               data: this.panel_1,
               fill: false,
               borderColor: '#FDC167',
             },
             {
-              label: '光触媒なし',
+              label: '光触媒薄塗り',
               data: this.panel_2,
               fill: false,
               borderColor: '#105170',
@@ -92,9 +92,8 @@ new Vue({
       await axios
         .get(api)
         .then( res => {
-          // 光触媒あり
+          // 光触媒厚塗り
           var res = res.data;
-          console.log(res)
           for(var data_1 in res.panel_1) {
             if(ElectricityType == 'power'){
               this.panel_1.push( res.panel_1[count_1].power );
@@ -106,7 +105,7 @@ new Vue({
             count_1 = count_1 + 1;
           }
 
-          // 光触媒なし
+          // 光触媒薄塗り
           for(var data_2 in res.panel_2) {
             if(ElectricityType == 'power'){
               this.panel_2.push( res.panel_2[count_2].power );
@@ -132,7 +131,6 @@ new Vue({
         if(typeof myChart !== 'undefined' && myChart) {
           myChart.destroy();//new chartでグラフがいっぱい描写されてしまうのでリセット
         }
-        console.log(this.xLabel)
         this.canvasChart();
     },
 

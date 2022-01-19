@@ -38,8 +38,8 @@
 
         <div id="export_csv" class="export_csv">
           <div class="export__csv__btn__box">
-            <a href="/csv/panel_1" class="export__csv__btn" target="_blank">光触媒ありcsv</a>
-            <a href="/csv/panel_2" class="export__csv__btn" target="_blank">光触媒なしcsv</a>
+            <a href="/csv/panel_1" class="export__csv__btn" target="_blank">光触媒厚塗りcsv</a>
+            <a href="/csv/panel_2" class="export__csv__btn" target="_blank">光触媒薄塗りcsv</a>
             <a href="/csv/by_day_power" class="export__csv__btn" target="_blank">日別最大電力csv</a>
           </div>
         </div>
