@@ -13,7 +13,7 @@ class APanelTableSeeder extends Seeder
     public function run()
     {
         //
-        for($i=0; $i<10000; $i++) {
+        for($i=0; $i<20000; $i++) {
             $vol = mt_rand(10, 50);
             $cur = mt_rand(0, 10);
             $pow = $vol * $cur;
