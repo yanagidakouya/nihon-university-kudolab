@@ -16,5 +16,5 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::get('/get_power_generation', 'IndexController@postData');
+Route::get('/get_power_generation', 'IndexController@getData');
 Route::post('/insert_data', 'IndexController@insertData');

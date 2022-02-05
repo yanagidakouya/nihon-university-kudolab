@@ -65,7 +65,11 @@ new Vue({
               gridLines: {
                 display: true,
                 color: 'rgba(255, 255, 255, 0.075)',
-              }
+              },
+              ticks: {                      //最大値最小値設定
+                min: 0,                   //最小値
+                max: 8,                  //最大値
+              },
             }]
           }
         }

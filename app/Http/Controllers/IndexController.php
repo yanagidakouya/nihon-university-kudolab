@@ -16,7 +16,7 @@ class IndexController extends Controller
       return view('top');
     }
 
-    public function postData(Request $request)
+    public function getData(Request $request)
     {
       if($request->ini == '1') {// 全期間
         $daily = Daily::all();
