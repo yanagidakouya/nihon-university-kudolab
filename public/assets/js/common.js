@@ -135,6 +135,9 @@ new Vue({
         if(typeof myChart !== 'undefined' && myChart) {
           myChart.destroy();//new chartでグラフがいっぱい描写されてしまうのでリセット
         }
+        this.xLabel.sort(function(a, b){
+          return (a > b ? 1 : -1);
+        });
         this.canvasChart();
     },
 
