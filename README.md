@@ -14,6 +14,7 @@
 
 ## 運用
 
+- GitHubにコミットやブランチのマージをするには操作権限が必要です。権限のリクエストはREADME下部に記載しました「連絡先」にご連絡ください。
 - 開発ブランチはfeature_developなどとします。
 - 本番(master）ブランチはfeature_yanagidaです。
 
@@ -48,4 +49,6 @@ $ php artisan serve
 ```
 
 - サーバーが立ち上がったらブラウザで「localhost:8000」とアクセス
+
+## 連絡先
 - 不明点やエラーが発生したら「yanagidakouya@gmail.com」までご連絡ください。
