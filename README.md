@@ -12,6 +12,21 @@
 - Composer version 1.10.20
 - git version 2.24.3
 
+## 運用
+
+- 開発ブランチはfeature_developなどとします。
+- 本番(master）ブランチはfeature_yanagidaです。
+
+```
+$ git add 「編集したファイル」
+$ git commit -m “改修した内容のコメントを入力する”
+$ git push origin feature_develop
+```
+
+- GitHubにアクセスしてpull requestを作成
+- feature_yanagidaにfeature_developをマージ
+
+
 ## 環境構築
 
 ```
